@@ -14,5 +14,5 @@ def solar():
 def generator():
     return render_template("generator.html")
 
-if__kyawrkar13-sys/Rkar-Kyaw__ == "__main__"
+if__Rkar-Kyaw__ == "__main__"
     app.run(host="0.0.0.0", port=5000)
