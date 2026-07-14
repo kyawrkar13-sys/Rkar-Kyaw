@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar + Generator ROI Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>Solar + Generator ROI Analyzer</h1>
+
+<h2>Solar System Input</h2>
+
+<label>Full Load (kW)</label>
+<input type="number" id="fullLoad">
+
+<label>Inverter Power (kW)</label>
+<input type="number" id="inverter">
+
+<label>Solar Module Watt (Wp)</label>
+<input type="number" id="moduleWp">
+
+<label>Module Quantity</label>
+<input type="number" id="moduleQty">
+
+<label>Solar Production (%)</label>
+<input type="number" id="solarPercent">
+
+<label>Solar Daily Hour</label>
+<input type="number" id="solarHour">
+
+
+<h2>EPC Input</h2>
+
+<label>Electricity Unit Price (MMK)</label>
+<input type="number" id="unitPrice">
+
+
+<h2>Generator Input</h2>
+
+<label>Generator Capacity (kVA)</label>
+<input type="number" id="genCapacity">
+
+<label>Fuel Consumption (Liter/Hour)</label>
+<input type="number" id="fuelRate">
+
+<label>Fuel Price (MMK/Liter)</label>
+<input type="number" id="fuelPrice">
+
+<label>Generator Backup Time (Hour)</label>
+<input type="number" id="backupHour">
+
+<label>Maintenance Cost (MMK)</label>
+<input type="number" id="maintenance">
+
+
+<h2>Investment</h2>
+
+<label>Product Cost (MMK)</label>
+<input type="number" id="productCost">
+
+<label>Installation Cost (MMK)</label>
+<input type="number" id="installCost">
+
+
+<br><br>
+
+<button onclick="calculate()">Calculate ROI</button>
+
+
+<div id="result"></div>
+
+
+<script>
+
+function calculate(){
+
+document.getElementById("result").innerHTML =
+"<h2>Calculation Engine Coming Next Step</h2>";
+
+}
+
+</script>
+
+
+</body>
+</html>
