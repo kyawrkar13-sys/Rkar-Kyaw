@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Fuel Saving Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
+<body>
+
+    <h1>Generator Fuel Saving Calculator</h1>
+
+    <label>Generator Load (kW)</label>
+    <input type="number" id="load">
+
+    <label>Running Hours / Day</label>
+    <input type="number" id="hours">
+
+    <label>Fuel Consumption (Liter/hour)</label>
+    <input type="number" id="fuelRate">
+
+    <label>Fuel Price</label>
+    <input type="number" id="fuelPrice">
+
+    <button>Calculate</button>
+
+    <a href="/">Back to Home</a>
+
+</body>
+</html>
