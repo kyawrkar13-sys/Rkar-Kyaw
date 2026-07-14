@@ -13,5 +13,7 @@ def solar():
 @app.route("/generator")
 def generator():
     return render_template("generator.html")
+
+
 if__name__ == "__main__"
     app.run(host="0.0.0.0", port=5000)
