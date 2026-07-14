@@ -1,76 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Fuel Saving Calculator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Generator Fuel Cost Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
 
-    <h1>Generator Fuel Saving Calculator</h1>
+<h2>⚡ Generator Fuel Cost Calculator</h2>
 
-    <label>Generator Load (kW)</label>
-    <input type="number" id="load">
+<form method="post">
 
-    <label>Running Hours / Day</label>
-    <input type="number" id="hours">
+<label>Generator Capacity (kW)</label><br>
+<input type="number" step="0.1" name="capacity" required>
+<br><br>
 
-    <label>Fuel Consumption (Liter / Hour)</label>
-    <input type="number" id="fuelRate">
+<label>Running Hours per Day</label><br>
+<input type="number" step="0.1" name="hours" required>
+<br><br>
 
-    <label>Fuel Price</label>
-    <input type="number" id="fuelPrice">
+<label>Fuel Consumption (Liter/hour)</label><br>
+<input type="number" step="0.01" name="fuel_rate" required>
+<br><br>
 
-    <button onclick="calculateGenerator()">Calculate</button>
+<label>Fuel Price (MMK/Liter)</label><br>
+<input type="number" name="fuel_price" required>
+<br><br>
 
-    <div id="result"></div>
+<label>Operating Days per Month</label><br>
+<input type="number" name="days" required>
+<br><br>
 
-    <br>
-    <a href="/">← Back to Home</a>
+<button type="submit">Calculate</button>
 
-    <script>
-        function calculateGenerator() {
-            const load = parseFloat(document.getElementById("load").value);
-            const hours = parseFloat(document.getElementById("hours").value);
-            const fuelRate = parseFloat(document.getElementById("fuelRate").value);
-            const fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
+</form>
 
-            if (
-                isNaN(load) ||
-                isNaN(hours) ||
-                isNaN(fuelRate) ||
-                isNaN(fuelPrice)
-            ) {
-                document.getElementById("result").innerHTML =
-                    "<h3>Please fill in all fields.</h3>";
-                return;
-            }
 
-            const dailyEnergy = load * hours;
-            const dailyFuel = fuelRate * hours;
-            const dailyFuelCost = dailyFuel * fuelPrice;
+{% if result %}
 
-            const monthlyEnergy = dailyEnergy * 30;
-            const monthlyFuel = dailyFuel * 30;
-            const monthlyFuelCost = dailyFuelCost * 30;
+<hr>
 
-            const yearlyFuel = dailyFuel * 365;
-            const yearlyFuelCost = dailyFuelCost * 365;
+<h3>📊 Result</h3>
 
-            document.getElementById("result").innerHTML = `
-                <h2>Results</h2>
-                <p><strong>Daily Energy:</strong> ${dailyEnergy.toFixed(2)} kWh</p>
-                <p><strong>Daily Fuel:</strong> ${dailyFuel.toFixed(2)} Liters</p>
-                <p><strong>Daily Fuel Cost:</strong> ${dailyFuelCost.toFixed(2)}</p>
-                <p><strong>Monthly Energy:</strong> ${monthlyEnergy.toFixed(2)} kWh</p>
-                <p><strong>Monthly Fuel:</strong> ${monthlyFuel.toFixed(2)} Liters</p>
-                <p><strong>Monthly Fuel Cost:</strong> ${monthlyFuelCost.toFixed(2)}</p>
-                <p><strong>Yearly Fuel:</strong> ${yearlyFuel.toFixed(2)} Liters</p>
-                <p><strong>Yearly Fuel Cost:</strong> ${yearlyFuelCost.toFixed(2)}</p>
-            `;
-        }
-    </script>
+<p>Daily Fuel:
+{{result.daily_fuel}} Liter/day</p>
+
+<p>Monthly Fuel:
+{{result.monthly_fuel}} Liter/month</p>
+
+<p>Monthly Fuel Cost:
+{{result.monthly_cost}} MMK</p>
+
+<p>Annual Fuel Cost:
+{{result.annual_cost}} MMK</p>
+
+{% endif %}
 
 </body>
 </html>
