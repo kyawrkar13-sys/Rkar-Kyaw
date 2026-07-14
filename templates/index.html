@@ -94,7 +94,7 @@ function calculate() {
 
     // SOLAR
     const solarSize = (moduleWp * moduleQty) / 1000;
-    const solarPower = solarSize * solarPercent;
+    const solarPower = inverter * solarPercent;
     const dailySolarEnergy = solarPower * solarHour;
     const monthlyUnits = dailySolarEnergy * 30;
 
