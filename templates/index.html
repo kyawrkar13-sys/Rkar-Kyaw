@@ -73,17 +73,137 @@
 <div id="result"></div>
 
 
+
+
 <script>
+function calculate() {
 
-function calculate(){
+    const moduleWp = Number(document.getElementById("moduleWp").value);
+    const moduleQty = Number(document.getElementById("moduleQty").value);
+    const solarPercent = Number(document.getElementById("solarPercent").value) / 100;
+    const solarHour = Number(document.getElementById("solarHour").value);
+    const unitPrice = Number(document.getElementById("unitPrice").value);
 
-document.getElementById("result").innerHTML =
-"<h2>Calculation Engine Coming Next Step</h2>";
+    const fuelRate = Number(document.getElementById("fuelRate").value);
+    const fuelPrice = Number(document.getElementById("fuelPrice").value);
+    const backupHour = Number(document.getElementById("backupHour").value);
+    const maintenance = Number(document.getElementById("maintenance").value);
 
+    const productCost = Number(document.getElementById("productCost").value);
+    const installCost = Number(document.getElementById("installCost").value);
+
+    // SOLAR
+    const solarSize = (moduleWp * moduleQty) / 1000;
+    const solarPower = solarSize * solarPercent;
+    const dailySolarEnergy = solarPower * solarHour;
+    const monthlyUnits = dailySolarEnergy * 30;
+
+    const monthlyEpcSaving = monthlyUnits * unitPrice;
+    const annualEpcSaving = monthlyEpcSaving * 12;
+
+    // GENERATOR
+    const dailyFuel = fuelRate * backupHour;
+    const dailyGeneratorCost = dailyFuel * fuelPrice;
+    const monthlyGeneratorCost = dailyGeneratorCost * 30;
+    const annualGeneratorCost = monthlyGeneratorCost * 12;
+    const annualGeneratorSaving = annualGeneratorCost + maintenance;
+
+    // TOTAL SAVING
+    const annualTotalSaving =
+        annualEpcSaving + annualGeneratorSaving;
+
+    // INVESTMENT
+    const totalInvestment =
+        productCost + installCost;
+
+    // PAYBACK
+    const payback =
+        totalInvestment / annualTotalSaving;
+
+    let roiTable = "";
+
+    for (let year = 1; year <= 12; year++) {
+
+        const cumulativeSaving =
+            annualTotalSaving * year;
+
+        const netProfit =
+            cumulativeSaving - totalInvestment;
+
+        roiTable += `
+            <tr>
+                <td>${year}</td>
+                <td>${totalInvestment.toLocaleString()}</td>
+                <td>${cumulativeSaving.toLocaleString()}</td>
+                <td>${netProfit.toLocaleString()}</td>
+            </tr>
+        `;
+    }
+
+    document.getElementById("result").innerHTML = `
+
+        <h2>Solar Results</h2>
+
+        <p>Solar PV Size:
+        <strong>${solarSize.toFixed(2)} kWp</strong></p>
+
+        <p>Solar Production Power:
+        <strong>${solarPower.toFixed(2)} kW</strong></p>
+
+        <p>Daily Solar Energy:
+        <strong>${dailySolarEnergy.toFixed(2)} kWh</strong></p>
+
+        <p>Monthly Unit Saving:
+        <strong>${monthlyUnits.toFixed(2)} Units</strong></p>
+
+        <p>Monthly EPC Saving:
+        <strong>${monthlyEpcSaving.toLocaleString()} MMK</strong></p>
+
+        <p>Annual EPC Saving:
+        <strong>${annualEpcSaving.toLocaleString()} MMK</strong></p>
+
+
+        <h2>Generator Results</h2>
+
+        <p>Daily Fuel:
+        <strong>${dailyFuel.toFixed(2)} Liters</strong></p>
+
+        <p>Daily Generator Cost:
+        <strong>${dailyGeneratorCost.toLocaleString()} MMK</strong></p>
+
+        <p>Monthly Generator Cost:
+        <strong>${monthlyGeneratorCost.toLocaleString()} MMK</strong></p>
+
+        <p>Annual Generator Operation Cost:
+        <strong>${annualGeneratorSaving.toLocaleString()} MMK</strong></p>
+
+
+        <h2>ROI Results</h2>
+
+        <p>Total Annual Saving:
+        <strong>${annualTotalSaving.toLocaleString()} MMK</strong></p>
+
+        <p>Total Investment:
+        <strong>${totalInvestment.toLocaleString()} MMK</strong></p>
+
+        <p>Payback Period:
+        <strong>${payback.toFixed(2)} Years</strong></p>
+
+
+        <table border="1" cellpadding="8">
+
+            <tr>
+                <th>Year</th>
+                <th>Investment</th>
+                <th>ROI (MMK)</th>
+                <th>Net Profit (MMK)</th>
+            </tr>
+
+            ${roiTable}
+
+        </table>
+    `;
 }
-
 </script>
-
-
 </body>
 </html>
