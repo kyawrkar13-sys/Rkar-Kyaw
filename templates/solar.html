@@ -1,72 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar ROI & NPV Analyzer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Solar ROI Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
 
-    <h1>Solar ROI & NPV Analyzer</h1>
+<h2>☀️ Solar ROI Calculator</h2>
 
-    <label>Solar System Cost</label>
-    <input type="number" id="systemCost">
+<form method="post">
 
-    <label>Annual Electricity Saving</label>
-    <input type="number" id="annualSaving">
+<label>Monthly Electricity Usage (kWh)</label><br>
+<input type="number" name="monthly_kwh" required>
+<br><br>
 
-    <label>Project Lifetime (Years)</label>
-    <input type="number" id="projectLife">
+<label>Electricity Rate (MMK/kWh)</label><br>
+<input type="number" name="rate" required>
+<br><br>
 
-    <label>Discount Rate (%)</label>
-    <input type="number" id="discountRate">
+<label>Solar System Size (kW)</label><br>
+<input type="number" step="0.1" name="solar_kw" required>
+<br><br>
 
-    <button onclick="calculateSolar()">Calculate</button>
+<label>Solar Installation Cost (MMK)</label><br>
+<input type="number" name="cost" required>
+<br><br>
 
-    <div id="result"></div>
+<button type="submit">Calculate</button>
 
-    <br>
-    <a href="/">← Back to Home</a>
+</form>
 
-    <script>
-        function calculateSolar() {
-            const systemCost = parseFloat(document.getElementById("systemCost").value);
-            const annualSaving = parseFloat(document.getElementById("annualSaving").value);
-            const projectLife = parseInt(document.getElementById("projectLife").value);
-            const discountRate = parseFloat(document.getElementById("discountRate").value) / 100;
 
-            if (
-                isNaN(systemCost) ||
-                isNaN(annualSaving) ||
-                isNaN(projectLife) ||
-                isNaN(discountRate)
-            ) {
-                document.getElementById("result").innerHTML =
-                    "<h3>Please fill in all fields.</h3>";
-                return;
-            }
+{% if result %}
 
-            const paybackPeriod = systemCost / annualSaving;
+<hr>
 
-            let npv = -systemCost;
+<h3>📊 Result</h3>
 
-            for (let year = 1; year <= projectLife; year++) {
-                npv += annualSaving / Math.pow(1 + discountRate, year);
-            }
+<p>Annual Electricity: {{result.annual_kwh}} kWh/year</p>
 
-            const totalSaving = annualSaving * projectLife;
-            const roi = ((totalSaving - systemCost) / systemCost) * 100;
+<p>Annual Solar Saving:
+{{result.saving}} MMK/year</p>
 
-            document.getElementById("result").innerHTML = `
-                <h2>Results</h2>
-                <p><strong>Payback Period:</strong> ${paybackPeriod.toFixed(2)} Years</p>
-                <p><strong>ROI:</strong> ${roi.toFixed(2)}%</p>
-                <p><strong>NPV:</strong> ${npv.toFixed(2)}</p>
-                <p><strong>Total Saving:</strong> ${totalSaving.toFixed(2)}</p>
-            `;
-        }
-    </script>
+<p>Payback Period:
+{{result.payback}} years</p>
+
+<p>ROI:
+{{result.roi}} %</p>
+
+{% endif %}
 
 </body>
 </html>
