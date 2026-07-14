@@ -18,8 +18,9 @@ h1 {
 h2 {
     margin-top: 30px;
     padding: 12px;
-    background: #ffffff;
-    border-left: 5px solid #333;
+    background: #0b1f3a;
+    color: white;
+    border-left: 5px solid #2f80ed;
     border-radius: 8px;
 }
 
@@ -43,6 +44,8 @@ input {
 }
 
 button {
+    background: #0b1f3a;
+    color: white;
     display: block;
     width: 100%;
     max-width: 600px;
