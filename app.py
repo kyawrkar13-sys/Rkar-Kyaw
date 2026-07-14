@@ -6,5 +6,9 @@ app = Flask(__name__)
 def home():
     return render_template("index.html")
 
+@app.route("/solar")
+def solar():
+    return render_template("solar.html")
+
 if name == "__main__":
     app.run(host="0.0.0.0", port=5000)
