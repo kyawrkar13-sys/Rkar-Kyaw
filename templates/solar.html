@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solar ROI & NPV Analyzer</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: white;
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 7px 0 15px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            border: 1px solid #4b5563;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .result {
+            padding: 10px 0;
+            border-bottom: 1px solid #374151;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>⚡ Solar ROI & NPV Analyzer</h1>
+
+<form method="POST">
+
+<div class="card">
+
+<h2>☀️ Solar System Input</h2>
+
+<label>PV Size (kW)</label>
+<input type="number" step="any"
+       name="pv_size" required>
+
+<label>Peak Sun Hour</label>
+<input type="number" step="any"
+       name="sun_hours" required>
+
+<label>Performance Ratio (%)</label>
+<input type="number" step="any"
+       name="performance_ratio" required>
+
+<label>Monthly Load (kWh)</label>
+<input type="number" step="any"
+       name="monthly_load" required>
+
+<label>Battery (kWh)</label>
+<input type="number" step="any"
+       name="battery_kwh" required>
+
+<label>Battery DoD (%)</label>
+<input type="number" step="any"
+       name="battery_dod" required>
+
+<label>Efficiency (%)</label>
+<input type="number" step="any"
+       name="efficiency" required>
+
+<label>Tariff - 1 Unit Price (MMK/kWh)</label>
+<input type="number" step="any"
+       name="tariff" required>
+
+<label>CAPEX (MMK)</label>
+<input type="number" step="any"
+       name="capex" required>
+
+<label>O&M / Year (MMK)</label>
+<input type="number" step="any"
+       name="om_year" required>
+
+<label>Project Life (Year)</label>
+<input type="number"
+       name="project_life" required>
+
+<label>Discount Rate (%)</label>
+<input type="number" step="any"
+       name="discount_rate"
+       value="10" required>
+
+</div>
+
+
+<div class="card">
+
+<h2>⛽ Generator Input</h2>
+
+<label>Fuel Price - 1 Liter (MMK/L)</label>
+<input type="number" step="any"
+       name="fuel_price" required>
+
+<label>Generator Fuel Consumption (Liter/Hour)</label>
+<input type="number" step="any"
+       name="fuel_consumption" required>
+
+<label>Running Hours Before Solar (Hour/Day)</label>
+<input type="number" step="any"
+       name="gen_hours_before" required>
+
+<label>Running Hours After Solar (Hour/Day)</label>
+<input type="number" step="any"
+       name="gen_hours_after" required>
+
+<label>Generator Operating Days / Year</label>
+<input type="number" step="any"
+       name="operating_days" required>
+
+</div>
+
+<button type="submit">
+RUN FULL ANALYSIS
+</button>
+
+</form>
+
+
+{% if result %}
+
+<div class="card">
+
+<h2>☀️ Solar Result</h2>
+
+<div class="result">
+PV Generation<br>
+<strong>
+{{ "{:,.2f}".format(result.pv_generation) }}
+kWh/year
+</strong>
+</div>
+
+<div class="result">
+Usable Battery<br>
+<strong>
+{{ "{:,.2f}".format(result.usable_battery) }}
+kWh
+</strong>
+</div>
+
+<div class="result">
+Annual Electricity Saving<br>
+<strong>
+{{ "{:,.0f}".format(result.electricity_saving) }}
+MMK/year
+</strong>
+</div>
+
+<div class="result">
+Solar Payback<br>
+<strong>{{ result.solar_payback }} Years</strong>
+</div>
+
+<div class="result">
+Solar ROI<br>
+<strong>{{ result.solar_roi }} %</strong>
+</div>
+
+<div class="result">
+Solar NPV<br>
+<strong>
+{{ "{:,.0f}".format(result.solar_npv) }} MMK
+</strong>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>⛽ Generator Saving Result</h2>
+
+<div class="result">
+Generator Hours Saved<br>
+<strong>
+{{ result.hours_saved }} Hours/Day
+</strong>
+</div>
+
+<div class="result">
+Fuel Saved<br>
+<strong>
+{{ "{:,.2f}".format(result.annual_fuel_saved) }}
+Liter/Year
+</strong>
+</div>
+
+<div class="result">
+Generator Fuel Cost Saving<br>
+<strong>
+{{ "{:,.0f}".format(result.generator_saving) }}
+MMK/Year
+</strong>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>⚡ TOTAL ROI & NPV</h2>
+
+<div class="result">
+Total Annual Saving<br>
+<strong>
+{{ "{:,.0f}".format(result.total_annual_saving) }}
+MMK/Year
+</strong>
+</div>
+
+<div class="result">
+Total Payback Period<br>
+<strong>
+{{ result.total_payback }} Years
+</strong>
+</div>
+
+<div class="result">
+Total ROI<br>
+<strong>{{ result.total_roi }} %</strong>
+</div>
+
+<div class="result">
+Total NPV<br>
+<strong>
+{{ "{:,.0f}".format(result.total_npv) }}
+MMK
+</strong>
+</div>
+
+</div>
+
+{% endif %}
+
+</body>
+</html>
