@@ -26,8 +26,8 @@
 <label>Module Quantity</label>
 <input type="number" id="moduleQty">
 
-<label>Solar Production (%)</label>
-<input type="number" id="solarPercent">
+<label>Solar Production (%) - Auto Calculated</label>
+<input type="number" id="solarPercent" readonly>
 
 <label>Solar Daily Hour</label>
 <input type="number" id="solarHour">
@@ -75,51 +75,150 @@
 
 
 
-<script>
+[15/07/2026 06:24] Rkar Kyaw: <script>
 
 function calculate() {
-    const inverter = Number(document.getElementById("inverter").value);
-    const moduleWp = Number(document.getElementById("moduleWp").value);
-    const moduleQty = Number(document.getElementById("moduleQty").value);
-    const solarPercent = Number(document.getElementById("solarPercent").value) / 100;
-    const solarHour = Number(document.getElementById("solarHour").value);
-    const unitPrice = Number(document.getElementById("unitPrice").value);
 
-    const fuelRate = Number(document.getElementById("fuelRate").value);
-    const fuelPrice = Number(document.getElementById("fuelPrice").value);
-    const backupHour = Number(document.getElementById("backupHour").value);
-    const maintenance = Number(document.getElementById("maintenance").value);
+    // =========================
+    // INPUTS
+    // =========================
 
-    const productCost = Number(document.getElementById("productCost").value);
-    const installCost = Number(document.getElementById("installCost").value);
+    const fullLoad =
+        Number(document.getElementById("fullLoad").value);
 
-    // SOLAR
-    const solarSize = (moduleWp * moduleQty) / 1000;
-    const solarPower = inverter * solarPercent;
-    const dailySolarEnergy = solarPower * solarHour;
-    const monthlyUnits = dailySolarEnergy * 30;
+    const inverter =
+        Number(document.getElementById("inverter").value);
 
-    const monthlyEpcSaving = monthlyUnits * unitPrice;
-    const annualEpcSaving = monthlyEpcSaving * 12;
+    const moduleWp =
+        Number(document.getElementById("moduleWp").value);
 
-    // GENERATOR
-    const dailyFuel = fuelRate * backupHour;
-    const dailyGeneratorCost = dailyFuel * fuelPrice;
-    const monthlyGeneratorCost = dailyGeneratorCost * 30;
-    const annualGeneratorCost = monthlyGeneratorCost * 12;
-    const annualGeneratorSaving = annualGeneratorCost + maintenance;
+    const moduleQty =
+        Number(document.getElementById("moduleQty").value);
 
+    const solarHour =
+        Number(document.getElementById("solarHour").value);
+
+    const unitPrice =
+        Number(document.getElementById("unitPrice").value);
+
+    const fuelRate =
+        Number(document.getElementById("fuelRate").value);
+
+    const fuelPrice =
+        Number(document.getElementById("fuelPrice").value);
+
+    const backupHour =
+        Number(document.getElementById("backupHour").value);
+
+    const maintenance =
+        Number(document.getElementById("maintenance").value);
+
+    const productCost =
+        Number(document.getElementById("productCost").value);
+
+    const installCost =
+        Number(document.getElementById("installCost").value);
+
+
+    // =========================
+    // SOLAR CALCULATION
+    // =========================
+
+    // PV Installed Size
+    const solarSize =
+        (moduleWp * moduleQty) / 1000;
+
+
+    // Solar Production %
+    // Example: 15 ÷ 60 × 100 = 25%
+    const solarPercent =
+        (fullLoad / inverter) * 100;
+
+
+    // Show calculated percentage
+    document.getElementById("solarPercent").value =
+        solarPercent.toFixed(2);
+
+
+    // Solar Production Power
+    // Example: 60 × 25% = 15 kW
+    const solarPower =
+        inverter * (solarPercent / 100);
+
+
+    // Daily Solar Energy
+    // Example: 15 × 3.5 = 52.5 kWh
+    const dailySolarEnergy =
+        solarPower * solarHour;
+
+
+    // Monthly EPC Units
+    // Example: 52.5 × 30 = 1,575 Units
+    const monthlyUnits =
+        dailySolarEnergy * 30;
+
+
+    // Monthly EPC Saving
+    // Example: 1,575 × 900 = 1,417,500 MMK
+    const monthlyEpcSaving =
+        monthlyUnits * unitPrice;
+
+
+    // Annual EPC Saving
+    const annualEpcSaving =
+        monthlyEpcSaving * 12;
+
+
+    // =========================
+    // GENERATOR CALCULATION
+    // =========================
+
+    const dailyFuel =
+        fuelRate * backupHour;
+
+    const dailyGeneratorCost =
+        dailyFuel * fuelPrice;
+
+    const monthlyGeneratorCost =
+        dailyGeneratorCost * 30;
+
+    const annualGeneratorCost =
+        monthlyGeneratorCost * 12;
+
+    const annualGeneratorSaving =
+        annualGeneratorCost + maintenance;
+
+
+    // =========================
     // TOTAL SAVING
+    // =========================
+
     const annualTotalSaving =
-        annualEpcSaving + annualGeneratorSaving;
+        annualEpcSaving +
+        annualGeneratorSaving;
 
+
+    // =========================
     // INVESTMENT
-    const totalInvestment =
-        productCost + installCost;
+    // =========================
 
+    const totalInvestment =
+        productCost +
+        installCost;
+
+
+    // =========================
     // PAYBACK
+    // =========================
+
     const payback =
-        totalInvestment / annualTotalSaving;
+        totalInvestment /
+        annualTotalSaving;
+
+
+    // =========================
+    // ROI TABLE
+    // =========================
 
     let roiTable = "";
 
@@ -141,6 +240,11 @@ function calculate() {
         `;
     }
 
+
+    // =========================
+    // RESULTS
+    // =========================
+
     document.getElementById("result").innerHTML = `
 
         <h2>Solar Results</h2>
@@ -148,13 +252,15 @@ function calculate() {
         <p>Solar PV Size:
         <strong>${solarSize.toFixed(2)} kWp</strong></p>
 
+        <p>Solar Production:
+        <strong>${solarPercent.toFixed(2)} %</strong></p>
+
         <p>Solar Production Power:
         <strong>${solarPower.toFixed(2)} kW</strong></p>
-
-        <p>Daily Solar Energy:
+[15/07/2026 06:24] Rkar Kyaw: <p>Daily Solar Energy:
         <strong>${dailySolarEnergy.toFixed(2)} kWh</strong></p>
 
-        <p>Monthly Unit Saving:
+        <p>Monthly EPC Unit:
         <strong>${monthlyUnits.toFixed(2)} Units</strong></p>
 
         <p>Monthly EPC Saving:
@@ -205,6 +311,7 @@ function calculate() {
         </table>
     `;
 }
+
 </script>
 </body>
 </html>
