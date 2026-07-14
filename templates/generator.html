@@ -6,7 +6,6 @@
     <title>Generator Fuel Saving Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
     <h1>Generator Fuel Saving Calculator</h1>
@@ -17,15 +16,61 @@
     <label>Running Hours / Day</label>
     <input type="number" id="hours">
 
-    <label>Fuel Consumption (Liter/hour)</label>
+    <label>Fuel Consumption (Liter / Hour)</label>
     <input type="number" id="fuelRate">
 
     <label>Fuel Price</label>
     <input type="number" id="fuelPrice">
 
-    <button>Calculate</button>
+    <button onclick="calculateGenerator()">Calculate</button>
 
-    <a href="/">Back to Home</a>
+    <div id="result"></div>
+
+    <br>
+    <a href="/">← Back to Home</a>
+
+    <script>
+        function calculateGenerator() {
+            const load = parseFloat(document.getElementById("load").value);
+            const hours = parseFloat(document.getElementById("hours").value);
+            const fuelRate = parseFloat(document.getElementById("fuelRate").value);
+            const fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
+
+            if (
+                isNaN(load) ||
+                isNaN(hours) ||
+                isNaN(fuelRate) ||
+                isNaN(fuelPrice)
+            ) {
+                document.getElementById("result").innerHTML =
+                    "<h3>Please fill in all fields.</h3>";
+                return;
+            }
+
+            const dailyEnergy = load * hours;
+            const dailyFuel = fuelRate * hours;
+            const dailyFuelCost = dailyFuel * fuelPrice;
+
+            const monthlyEnergy = dailyEnergy * 30;
+            const monthlyFuel = dailyFuel * 30;
+            const monthlyFuelCost = dailyFuelCost * 30;
+
+            const yearlyFuel = dailyFuel * 365;
+            const yearlyFuelCost = dailyFuelCost * 365;
+
+            document.getElementById("result").innerHTML = `
+                <h2>Results</h2>
+                <p><strong>Daily Energy:</strong> ${dailyEnergy.toFixed(2)} kWh</p>
+                <p><strong>Daily Fuel:</strong> ${dailyFuel.toFixed(2)} Liters</p>
+                <p><strong>Daily Fuel Cost:</strong> ${dailyFuelCost.toFixed(2)}</p>
+                <p><strong>Monthly Energy:</strong> ${monthlyEnergy.toFixed(2)} kWh</p>
+                <p><strong>Monthly Fuel:</strong> ${monthlyFuel.toFixed(2)} Liters</p>
+                <p><strong>Monthly Fuel Cost:</strong> ${monthlyFuelCost.toFixed(2)}</p>
+                <p><strong>Yearly Fuel:</strong> ${yearlyFuel.toFixed(2)} Liters</p>
+                <p><strong>Yearly Fuel Cost:</strong> ${yearlyFuelCost.toFixed(2)}</p>
+            `;
+        }
+    </script>
 
 </body>
 </html>
