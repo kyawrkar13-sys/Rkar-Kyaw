@@ -6,7 +6,6 @@
     <title>Solar ROI & NPV Analyzer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
     <h1>Solar ROI & NPV Analyzer</h1>
@@ -23,9 +22,51 @@
     <label>Discount Rate (%)</label>
     <input type="number" id="discountRate">
 
-    <button>Calculate</button>
+    <button onclick="calculateSolar()">Calculate</button>
 
-    <a href="/">Back to Home</a>
+    <div id="result"></div>
+
+    <br>
+    <a href="/">← Back to Home</a>
+
+    <script>
+        function calculateSolar() {
+            const systemCost = parseFloat(document.getElementById("systemCost").value);
+            const annualSaving = parseFloat(document.getElementById("annualSaving").value);
+            const projectLife = parseInt(document.getElementById("projectLife").value);
+            const discountRate = parseFloat(document.getElementById("discountRate").value) / 100;
+
+            if (
+                isNaN(systemCost) ||
+                isNaN(annualSaving) ||
+                isNaN(projectLife) ||
+                isNaN(discountRate)
+            ) {
+                document.getElementById("result").innerHTML =
+                    "<h3>Please fill in all fields.</h3>";
+                return;
+            }
+
+            const paybackPeriod = systemCost / annualSaving;
+
+            let npv = -systemCost;
+
+            for (let year = 1; year <= projectLife; year++) {
+                npv += annualSaving / Math.pow(1 + discountRate, year);
+            }
+
+            const totalSaving = annualSaving * projectLife;
+            const roi = ((totalSaving - systemCost) / systemCost) * 100;
+
+            document.getElementById("result").innerHTML = `
+                <h2>Results</h2>
+                <p><strong>Payback Period:</strong> ${paybackPeriod.toFixed(2)} Years</p>
+                <p><strong>ROI:</strong> ${roi.toFixed(2)}%</p>
+                <p><strong>NPV:</strong> ${npv.toFixed(2)}</p>
+                <p><strong>Total Saving:</strong> ${totalSaving.toFixed(2)}</p>
+            `;
+        }
+    </script>
 
 </body>
 </html>
