@@ -26,7 +26,7 @@
 <label>Module Quantity</label>
 <input type="number" id="moduleQty">
 
-<label>Solar Production (%) - Auto Calculated</label>
+<label>Load / Inverter Ratio (%) - Auto</label>
 <input type="number" id="solarPercent" readonly>
 
 <label>Solar Daily Hour</label>
@@ -75,7 +75,7 @@
 
 
 
-[15/07/2026 06:24] Rkar Kyaw: <script>
+    <script>
 
 function calculate() {
 
@@ -129,27 +129,25 @@ function calculate() {
         (moduleWp * moduleQty) / 1000;
 
 
-    // Solar Production %
-    // Example: 15 ÷ 60 × 100 = 25%
-    const solarPercent =
-        (fullLoad / inverter) * 100;
+   // Load / Inverter Ratio (%)
+// Example: 15 / 60 × 100 = 25%
+const solarPercent =
+    (fullLoad / inverter) * 100;
+
+document.getElementById("solarPercent").value =
+    solarPercent.toFixed(2);
 
 
-    // Show calculated percentage
-    document.getElementById("solarPercent").value =
-        solarPercent.toFixed(2);
+// Available usable solar power
+// PV Size, Inverter Size, Full Load ထဲက
+// အငယ်ဆုံး power ကို အသုံးပြုမယ်
+const solarPower =
+    Math.min(fullLoad, solarSize, inverter);
 
 
-    // Solar Production Power
-    // Example: 60 × 25% = 15 kW
-    const solarPower =
-        inverter * (solarPercent / 100);
-
-
-    // Daily Solar Energy
-    // Example: 15 × 3.5 = 52.5 kWh
-    const dailySolarEnergy =
-        solarPower * solarHour;
+// Daily Solar Energy
+const dailySolarEnergy =
+    solarPower * solarHour;
 
 
     // Monthly EPC Units
