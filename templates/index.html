@@ -86,7 +86,11 @@ console.log("PWA Ready");
 <br><br>
 
 <button onclick="calculate()">Calculate ROI</button>
+<button onclick="saveProject()">
+💾 Save Project
+</button>
 
+<div id="savedProjects"></div>
 
 <div id="result"></div>
 
@@ -398,6 +402,66 @@ window.myChart = new Chart(ctx, {
 
 
 }
+function saveProject(){
+
+let project={
+
+date:new Date().toLocaleDateString(),
+
+investment:
+document.getElementById("productCost").value,
+
+solar:
+document.getElementById("moduleQty").value,
+
+generator:
+document.getElementById("genCapacity").value
+
+};
+
+
+let projects =
+JSON.parse(localStorage.getItem("projects")) || [];
+
+
+projects.push(project);
+
+
+localStorage.setItem(
+"projects",
+JSON.stringify(projects)
+);
+
+
+alert("Project Saved");
+
+}
+function loadProjects(){
+
+let projects =
+JSON.parse(localStorage.getItem("projects")) || [];
+
+
+let html="";
+
+
+projects.forEach((p,i)=>{
+
+html += `
+<p>
+Project ${i+1}<br>
+Solar Module: ${p.solar}<br>
+Generator: ${p.generator}<br>
+Investment: ${p.investment}
+</p>
+`;
+
+});
+
+
+document.getElementById("savedProjects").innerHTML=html;
+
+}          
 </script>
 </body>
 </html>
