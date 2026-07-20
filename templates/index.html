@@ -10,7 +10,7 @@
       href="{{ url_for('static', filename='manifest.json') }}">
 <link rel="apple-touch-icon"
       href="{{ url_for('static', filename='icon-192.png') }}">
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <meta name="theme-color" content="#003366">
 </head>
 
@@ -300,7 +300,11 @@ const dailySolarEnergy =
         <p>Payback Period:
         <strong>${payback.toFixed(2)} Years</strong></p>
 
+<h2>📈 ROI Graph</h2>
 
+<canvas id="roiChart"></canvas>
+
+<br><br>
         <table border="1" cellpadding="8">
 
             <tr>
@@ -315,7 +319,76 @@ const dailySolarEnergy =
         </table>
     `;
 }
+`;
 
+
+// =========================
+// ROI GRAPH
+// =========================
+
+let years = [];
+let savingData = [];
+let profitData = [];
+
+for(let year=1; year<=12; year++){
+
+    years.push("Year " + year);
+
+    let saving =
+        annualTotalSaving * year;
+
+    let profit =
+        saving - totalInvestment;
+
+    savingData.push(saving);
+    profitData.push(profit);
+
+}
+
+
+if(window.myChart){
+    window.myChart.destroy();
+}
+
+
+let ctx =
+document.getElementById("roiChart");
+
+
+window.myChart = new Chart(ctx, {
+
+    type:"line",
+
+    data:{
+
+        labels:years,
+
+        datasets:[
+
+        {
+        label:"Total Saving (MMK)",
+        data:savingData,
+        borderWidth:3
+        },
+
+        {
+        label:"Net Profit (MMK)",
+        data:profitData,
+        borderWidth:3
+        }
+
+        ]
+
+    },
+
+    options:{
+        responsive:true
+    }
+
+});
+
+
+}
 </script>
 </body>
 </html>
