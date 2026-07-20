@@ -13,7 +13,18 @@
 <meta name="theme-color" content="#003366">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script   
 </head>
+<script>
 
+if ("serviceWorker" in navigator) {
+
+navigator.serviceWorker.register("/service-worker.js")
+.then(function(){
+console.log("PWA Ready");
+});
+
+}
+
+</script>
 <body>
 
 <h1>📊☀️Solar + Generator ROI Analyzer</h1>
