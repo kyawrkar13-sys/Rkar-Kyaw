@@ -1,2 +1,2 @@
 # Rkar-Kyaw
-Solar ROI &amp; NPV
+Solar ROI &amp; Gen
